@@ -19,7 +19,13 @@ class CyberPayApi {
       print('${response.data}');
       transactionCallBack.onSuccess(response.data);
       return ApiResponse.fromJson(json.decode(response.data));
-    } else {
+    } else if( response.statusCode == 500){
+      print('${response.data}');
+      transactionCallBack.onSuccess(response.data);
+      return ApiResponse.fromJson(json.decode(response.data));
+
+    }
+    else {
       throw CleanerException('Failed to verify payments');
     }
   }

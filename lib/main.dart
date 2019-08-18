@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cyberpaysdkflutter/src/apis/CyberPayApi.dart';
 import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart';
+import 'package:cyberpaysdkflutter/src/models/CardModel.dart';
 import 'package:cyberpaysdkflutter/src/models/TransactionModel.dart';
 import 'package:cyberpaysdkflutter/src/repository/TransactionRepository.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +104,12 @@ class MySampleState extends State<MySample> {
                 ),
                 onPressed: () {
 
+
+                  var splitDate = expiryDate.split("/");
+
+
+
+
                   TransactionModel _transModel = TransactionModel(
                     merchantRef: Random(4324).toString(),
                     amount: int.parse(_amountController.text)* 100,
@@ -118,7 +125,16 @@ class MySampleState extends State<MySample> {
 
                     var reference = result.data.transactionReference;
 
-                    TransactionRepository.getInstance(CyberPayApi()).beginTransactionApi(transactionModelToJson(_transModel)).then((result){
+                    CardModel _charge = CardModel(
+                        name: cardHolderName,
+                        cardNumber: cardNumber,
+                        expiryMonth: int.parse(splitDate[0]),
+                        expiryYear: int.parse(splitDate[1]),
+                        cvv: cvvCode,
+                        reference: reference
+
+                    );
+                    TransactionRepository.getInstance(CyberPayApi()).chargeCardApi(cardModelToJson(_charge)).then((result){
 
                     });
 
@@ -183,261 +199,3 @@ class MySampleState extends State<MySample> {
     });
   }
 }
-
-
-//import 'dart:convert';
-//
-//import 'package:flutter/material.dart';
-//import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-//import 'package:letshegodemo/create_customer.dart';
-//import 'package:letshegodemo/deposit.dart';
-//import 'package:letshegodemo/loan_repayment.dart';
-//import 'package:letshegodemo/repository/accountRepository.dart';
-//
-//import 'apis/letshego_api.dart';
-//import 'model/customer_model.dart';
-//import 'model/deposit_model.dart';
-//
-//void main() => runApp(MyApp());
-//
-//class MyApp extends StatelessWidget {
-//  // This widget is the root of your application.
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      debugShowCheckedModeBanner: false,
-//      title: 'Flutter Demo',
-//      theme: ThemeData(
-//        // This is the theme of your application.
-//        //
-//        // Try running your application with "flutter run". You'll see the
-//        // application has a blue toolbar. Then, without quitting the app, try
-//        // changing the primarySwatch below to Colors.green and then invoke
-//        // "hot reload" (press "r" in the console where you ran "flutter run",
-//        // or simply save your changes to "hot reload" in a Flutter IDE).
-//        // Notice that the counter didn't reset back to zero; the application
-//        // is not restarted.
-//        primarySwatch: Colors.blue,
-//      ),
-//      home: MyHomePage(title: 'Flutter Demo Home Page'),
-//    );
-//  }
-//}
-//
-//class MyHomePage extends StatefulWidget {
-//  MyHomePage({Key key, this.title}) : super(key: key);
-//
-//  final String title;
-//
-//  @override
-//  _MyHomePageState createState() => _MyHomePageState();
-//}
-//
-//class _MyHomePageState extends State<MyHomePage> {
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//      appBar: AppBar(
-//        elevation: 0,
-//        backgroundColor: Colors.white,
-//        title: Text('Letshego Demo',
-//            style: TextStyle(color: Colors.black, fontSize: 16.0)),
-//        actions: <Widget>[
-//          Container(
-//            margin: EdgeInsets.only(right: 8.0),
-//            child: Row(
-//              mainAxisAlignment: MainAxisAlignment.center,
-//              crossAxisAlignment: CrossAxisAlignment.center,
-//              children: <Widget>[
-//                Text('Logout',
-//                    style: TextStyle(
-//                        color: Colors.red,
-//                        fontWeight: FontWeight.w700,
-//                        fontSize: 14.0)),
-//                Icon(Icons.arrow_drop_down, color: Colors.black54)
-//              ],
-//            ),
-//          )
-//        ],
-//      ),
-//      body: StaggeredGridView.count(
-//        crossAxisCount: 2,
-//        crossAxisSpacing: 12.0,
-//        mainAxisSpacing: 12.0,
-//        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//        children: <Widget>[
-//          _buildTile(Padding(
-//            padding: const EdgeInsets.all(24.0),
-//            child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                crossAxisAlignment: CrossAxisAlignment.center,
-//                children: <Widget>[
-//                  Column(
-//                    mainAxisAlignment: MainAxisAlignment.center,
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      Text('Loans collected',
-//                          style: TextStyle(color: Colors.blueAccent)),
-//                      Text('2k',
-//                          style: TextStyle(
-//                              color: Colors.black,
-//                              fontWeight: FontWeight.w700,
-//                              fontSize: 34.0))
-//                    ],
-//                  ),
-//                  Material(
-//                      color: Colors.blue,
-//                      borderRadius: BorderRadius.circular(24.0),
-//                      child: Center(
-//                          child: Padding(
-//                            padding: const EdgeInsets.all(16.0),
-//                            child: Icon(Icons.verified_user,
-//                                color: Colors.white, size: 30.0),
-//                          )))
-//                ]),
-//          )),
-//          _buildTile(
-//              Padding(
-//                padding: const EdgeInsets.all(24.0),
-//                child: Column(
-//                    mainAxisAlignment: MainAxisAlignment.start,
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      Material(
-//                          color: Colors.teal,
-//                          shape: CircleBorder(),
-//                          child: Padding(
-//                            padding: const EdgeInsets.all(16.0),
-//                            child: Icon(Icons.account_balance_wallet,
-//                                color: Colors.white, size: 30.0),
-//                          )),
-//                      Padding(padding: EdgeInsets.only(bottom: 16.0)),
-//                      Text('Deposit',
-//                          style: TextStyle(
-//                              color: Colors.black,
-//                              fontWeight: FontWeight.w700,
-//                              fontSize: 16.0)),
-//                      Text('Deposit funds for customers',
-//                          style: TextStyle(color: Colors.black45)),
-//                    ]),
-//              ), onTap: () {
-//            Navigator.push(
-//              context,
-//              MaterialPageRoute(builder: (context) => DepositScreen()),
-//            );
-//          }),
-//          _buildTile(
-//              Padding(
-//                padding: const EdgeInsets.all(24.0),
-//                child: Column(
-//                    mainAxisAlignment: MainAxisAlignment.start,
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      Material(
-//                          color: Colors.amber,
-//                          shape: CircleBorder(),
-//                          child: Padding(
-//                            padding: EdgeInsets.all(16.0),
-//                            child: Icon(Icons.account_balance,
-//                                color: Colors.white, size: 30.0),
-//                          )),
-//                      Padding(padding: EdgeInsets.only(bottom: 16.0)),
-//                      Text('Loan Collection',
-//                          style: TextStyle(
-//                              color: Colors.black,
-//                              fontWeight: FontWeight.w700,
-//                              fontSize: 16.0)),
-//                      Text(
-//                        'Collect loans on behalf of clients ',
-//                        style: TextStyle(
-//                          color: Colors.black45,
-//                        ),
-//                        maxLines: 2,
-//                      ),
-//                    ]),
-//              ), onTap: () {
-//            Navigator.push(
-//              context,
-//              MaterialPageRoute(builder: (context) => LoanRepaymentScreen()),
-//            );
-//          }),
-//          _buildTile(
-//              Padding(
-//                padding: const EdgeInsets.all(24.0),
-//                child: Row(
-//                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                    crossAxisAlignment: CrossAxisAlignment.center,
-//                    children: <Widget>[
-//                      Column(
-//                        mainAxisAlignment: MainAxisAlignment.center,
-//                        crossAxisAlignment: CrossAxisAlignment.start,
-//                        children: <Widget>[
-//                          // Text('Shop Items', style: TextStyle(color: Colors.redAccent)),
-//                          Text('Account Opening Form',
-//                              style: TextStyle(
-//                                  color: Colors.black,
-//                                  fontWeight: FontWeight.w700,
-//                                  fontSize: 16.0))
-//                        ],
-//                      ),
-//                      Material(
-//                          color: Colors.red,
-//                          borderRadius: BorderRadius.circular(24.0),
-//                          child: Center(
-//                              child: Padding(
-//                                padding: EdgeInsets.all(16.0),
-//                                child: Icon(Icons.supervisor_account,
-//                                    color: Colors.white, size: 30.0),
-//                              )))
-//                    ]),
-//              ), onTap: () {
-//            Navigator.push(
-//              context,
-//              MaterialPageRoute(builder: (context) => CreateCustomerScreen()),
-//            );
-//          }),
-//          _buildTile(
-//            _buildLogo(),
-//          ),
-//        ],
-//        staggeredTiles: [
-//          StaggeredTile.extent(2, 110.0),
-//          StaggeredTile.extent(1, 220.0),
-//          StaggeredTile.extent(1, 220.0),
-//          StaggeredTile.extent(2, 110.0),
-//          StaggeredTile.extent(2, 220.0),
-//        ],
-//      ),
-//    );
-//  }
-//
-//  Widget _buildTile(Widget child, {Function() onTap}) {
-//    return Material(
-//        elevation: 14.0,
-//        borderRadius: BorderRadius.circular(12.0),
-//        shadowColor: Color(0x802196F3),
-//        child: InkWell(
-//          // Do onTap() if it isn't null, otherwise do print()
-//            onTap: onTap != null
-//                ? () => onTap()
-//                : () {
-//              print('Not set yet');
-//            },
-//            child: child));
-//  }
-//
-//  Widget _buildLogo() {
-//    // ...
-//    return DecoratedBox(
-//      decoration: BoxDecoration(
-//        image: DecorationImage(
-//          image: AssetImage('images/logo.png'),
-//          // ...
-//        ),
-//        // ...
-//      ),
-//    );
-//    // ...
-//  }
-//}

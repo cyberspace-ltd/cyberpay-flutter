@@ -35,7 +35,7 @@ class TransactionModel {
     this.integrationKey,
     this.productCode,
     this.channel,
-    this.splits,
+    //this.splits,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) => TransactionModel(
@@ -50,7 +50,7 @@ class TransactionModel {
     integrationKey: json["integrationKey"],
     productCode: json["productCode"],
     channel: json["channel"],
-    splits: List<Split>.from(json["splits"].map((x) => Split.fromJson(x))),
+    //splits: List<Split>.from(json["splits"].map((x) => Split.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -66,7 +66,7 @@ class TransactionModel {
     "integrationKey": integrationKey,
     "productCode": productCode,
     "channel": channel,
-    "splits": List<dynamic>.from(splits.map((x) => x.toJson())),
+    //"splits": List<dynamic>.from(splits.map((x) => x.toJson())),
   };
 }
 
