@@ -85,7 +85,7 @@ class MySampleState extends State<MySample> {
               ),
 
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
                 child: _buildAmountWidget(),
               ),
               Expanded(
@@ -154,7 +154,7 @@ class MySampleState extends State<MySample> {
     return Container(
       child: TextFormField(
         autocorrect: false,
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.number,
         decoration: defaultTextFieldInputDecoration(label: 'Amount'),
         maxLines: 1,
         controller: _amountController,
