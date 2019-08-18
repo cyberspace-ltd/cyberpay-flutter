@@ -1,6 +1,7 @@
 
 
 import 'package:cyberpaysdkflutter/src/apis/CyberPayApi.dart';
+import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart';
 import 'package:cyberpaysdkflutter/src/network/ApiResponse.dart';
 
 class TransactionRepository {
@@ -18,7 +19,7 @@ class TransactionRepository {
   Future<ApiResponse> beginTransactionApi(
       String encodedBody) async {
     try {
-      return _api.beginTransaction(encodedBody);
+      return _api.beginTransaction(encodedBody,new TransactionCallBack());
     } catch (error) {
       rethrow;
     }

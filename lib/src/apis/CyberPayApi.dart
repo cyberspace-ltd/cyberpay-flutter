@@ -1,20 +1,23 @@
 import 'dart:convert';
 
 import 'package:cyberpaysdkflutter/src/exceptions/CleanerException.dart';
+import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart';
 import 'package:cyberpaysdkflutter/src/network/ApiResponse.dart';
 import 'package:dio/dio.dart';
 
 import 'EndPoint.dart';
 
 class CyberPayApi {
-  Dio dio = Dio();
+  Dio dio = new Dio();
 
   //TransactionModel
-  Future<ApiResponse> beginTransaction(String encodedBody) async {
+  Future<ApiResponse> beginTransaction(String encodedBody, final TransactionCallBack transactionCallBack) async {
     final response = await dio.post(EndPoints.postPaymentsUrl(),
     data: encodedBody);
 
     if (response.statusCode == 200) {
+      print('${response.data}');
+      transactionCallBack.onSuccess(response.data);
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to verify payments');
@@ -27,6 +30,8 @@ class CyberPayApi {
     data: encodedBody);
 
     if (response.statusCode == 200) {
+      print('${response.data}');
+
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to verify card');
@@ -38,6 +43,8 @@ class CyberPayApi {
     final response = await dio.get(EndPoints.getPaymentsTransactionRefUrl(transactionRef));
 
     if (response.statusCode == 200) {
+      print('${response.data}');
+
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to verify transaction');
@@ -49,6 +56,8 @@ class CyberPayApi {
     final response = await dio.post(EndPoints.postPaymentsOtpUrl(), data: encodedBody);
 
     if (response.statusCode == 200) {
+      print('${response.data}');
+
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to verify otp');
@@ -61,6 +70,8 @@ class CyberPayApi {
     );
 
     if (response.statusCode == 200) {
+      print('${response.data}');
+
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to verify Bank Otp');
@@ -72,6 +83,7 @@ class CyberPayApi {
     final response = await dio.post(EndPoints.postPaymentsBankUrl());
 
     if (response.statusCode == 200) {
+      print('${response.data}');
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to charge bank');
@@ -83,6 +95,7 @@ class CyberPayApi {
     final response = await dio.post(EndPoints.postBankEnrolOtpUrl(), data: encodedBody);
 
     if (response.statusCode == 200) {
+      print('${response.data}');
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to enrol Otp');
@@ -94,10 +107,12 @@ class CyberPayApi {
     final response = await dio.get(EndPoints.getBanksUrl());
 
     if (response.statusCode == 200) {
+      print('${response.data}');
       return ApiResponse.fromJson(json.decode(response.data));
     } else {
       throw CleanerException('Failed to get bank');
     }
   }
+
 
 }
