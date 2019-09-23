@@ -1,8 +1,7 @@
-
-
 import 'package:cyberpaysdkflutter/src/apis/CyberPayApi.dart';
 import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart';
 import 'package:cyberpaysdkflutter/src/network/ApiResponse.dart';
+import 'package:cyberpaysdkflutter/src/network/ChargeResponse.dart';
 
 class TransactionRepository {
   static CyberPayApi _api;
@@ -16,18 +15,25 @@ class TransactionRepository {
     return _instance;
   }
 
-  Future<ApiResponse> beginTransactionApi(
-      String encodedBody) async {
+  Future<ApiResponse> beginTransactionApi(String encodedBody) async {
     try {
-      return _api.beginTransaction(encodedBody,new TransactionCallBack());
+      return _api.beginTransaction(encodedBody, new TransactionCallBack());
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<ApiResponse> chargeCardApi(String encodedBody) async {
+  Future<CardPaymentResponse> chargeCardApi(String encodedBody) async {
     try {
-      return _api.chargeCard(encodedBody);
+      return _api.chargeCard(encodedBody, new TransactionCallBack());
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<String> getEncodedPayload(String encodedBody) async {
+    try {
+      return encodedBody;
     } catch (error) {
       rethrow;
     }
@@ -41,7 +47,7 @@ class TransactionRepository {
     }
   }
 
-  Future<ApiResponse> VerifyOtpApi(String value) async {
+  Future<CardPaymentResponse> VerifyOtpApi(String value) async {
     try {
       return _api.VerifyOtp(value);
     } catch (error) {
@@ -49,8 +55,7 @@ class TransactionRepository {
     }
   }
 
-  Future<ApiResponse> VerifyBankOtpApi(
-      String encodedBody) async {
+  Future<CardPaymentResponse> VerifyBankOtpApi(String encodedBody) async {
     try {
       return _api.VerifyBankOtp(encodedBody);
     } catch (error) {
@@ -58,8 +63,7 @@ class TransactionRepository {
     }
   }
 
-  Future<ApiResponse> chargeBankApi(
-      String encodedBody) async {
+  Future<ApiResponse> chargeBankApi(String encodedBody) async {
     try {
       return _api.chargeBank(encodedBody);
     } catch (error) {
@@ -67,8 +71,7 @@ class TransactionRepository {
     }
   }
 
-  Future<ApiResponse> enrolOtpApi(
-      String encodedBody) async {
+  Future<ApiResponse> enrolOtpApi(String encodedBody) async {
     try {
       return _api.enrolOtp(encodedBody);
     } catch (error) {

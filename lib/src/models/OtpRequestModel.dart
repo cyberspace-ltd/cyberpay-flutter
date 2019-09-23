@@ -4,16 +4,20 @@
 
 import 'dart:convert';
 
-OtpRequestModel otpRequestModelFromJson(String str) => OtpRequestModel.fromJson(json.decode(str));
+import 'package:scoped_model/scoped_model.dart';
 
-String otpRequestModelToJson(OtpRequestModel data) => json.encode(data.toJson());
+OtpRequestModel otpRequestModelFromJson(String str) =>
+    OtpRequestModel.fromJson(json.decode(str));
+
+String otpRequestModelToJson(OtpRequestModel data) =>
+    json.encode(data.toJson());
 
 class OtpRequestModel {
   AdviceModel adviceModel;
   String otp;
   String reference;
   String otpReference;
-  Card cardModel;
+  CardModel cardModel;
   String paymentId;
   String transactionIdentifier;
   String eciFlag;
@@ -31,29 +35,34 @@ class OtpRequestModel {
     this.registeredPhoneNumber,
   });
 
-  factory OtpRequestModel.fromJson(Map<String, dynamic> json) => OtpRequestModel(
-    adviceModel: AdviceModel.fromJson(json["adviceModel"]),
-    otp: json["otp"],
-    reference: json["reference"],
-    otpReference: json["otpReference"],
-    cardModel: Card.fromJson(json["cardModel"]),
-    paymentId: json["paymentId"],
-    transactionIdentifier: json["transactionIdentifier"],
-    eciFlag: json["eciFlag"],
-    registeredPhoneNumber: json["registeredPhoneNumber"],
-  );
+  factory OtpRequestModel.fromJson(Map<String, dynamic> json) =>
+      OtpRequestModel(
+        adviceModel: AdviceModel.fromJson(json["adviceModel"]),
+        otp: json["otp"],
+        reference: json["reference"],
+        otpReference: json["otpReference"],
+        cardModel: CardModel.fromJson(json["cardModel"]),
+        paymentId: json["paymentId"],
+        transactionIdentifier: json["transactionIdentifier"],
+        eciFlag: json["eciFlag"] == null ? null : json["eciFlag"],
+        registeredPhoneNumber: json["registeredPhoneNumber"] == null
+            ? null
+            : json["registeredPhoneNumber"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "adviceModel": adviceModel.toJson(),
-    "otp": otp,
-    "reference": reference,
-    "otpReference": otpReference,
-    "cardModel": cardModel.toJson(),
-    "paymentId": paymentId,
-    "transactionIdentifier": transactionIdentifier,
-    "eciFlag": eciFlag,
-    "registeredPhoneNumber": registeredPhoneNumber,
-  };
+        "adviceModel": adviceModel == null ? null : adviceModel.toJson(),
+        "otp": otp,
+        "reference": reference,
+        "otpReference": otpReference == null ? null : otpReference,
+        "cardModel": cardModel == null ? null : cardModel.toJson(),
+        "paymentId": paymentId == null ? null : paymentId,
+        "transactionIdentifier":
+            transactionIdentifier == null ? null : transactionIdentifier,
+        "eciFlag": eciFlag == null ? null : eciFlag,
+        "registeredPhoneNumber":
+            registeredPhoneNumber == null ? null : registeredPhoneNumber,
+      };
 }
 
 class AdviceModel {
@@ -81,7 +90,7 @@ class AdviceModel {
   String processorCode;
   String productCode;
   String channelCode;
-  Card card;
+  CardModel card;
   Integration integration;
   DateTime createdOn;
   List<Transaction> transactions;
@@ -128,79 +137,84 @@ class AdviceModel {
   });
 
   factory AdviceModel.fromJson(Map<String, dynamic> json) => AdviceModel(
-    adviceId: json["adviceId"],
-    currency: json["currency"],
-    reference: json["reference"],
-    processorRef: json["processorRef"],
-    merchantRef: json["merchantRef"],
-    originalAmount: json["originalAmount"],
-    amountAfterCharge: json["amountAfterCharge"],
-    description: json["description"],
-    customerId: json["customerId"],
-    customerName: json["customerName"],
-    customerEmail: json["customerEmail"],
-    customerMobile: json["customerMobile"],
-    charge: json["charge"],
-    status: json["status"],
-    message: json["message"],
-    integrationKey: json["integrationKey"],
-    integrationId: json["integrationId"],
-    returnUrl: json["returnUrl"],
-    walletId: json["walletId"],
-    cyberpayReturnUrl: json["cyberpayReturnUrl"],
-    cyberpayNotificationUrl: json["cyberpayNotificationUrl"],
-    processorCode: json["processorCode"],
-    productCode: json["productCode"],
-    channelCode: json["channelCode"],
-    card: Card.fromJson(json["card"]),
-    integration: Integration.fromJson(json["integration"]),
-    createdOn: DateTime.parse(json["createdOn"]),
-    transactions: List<Transaction>.from(json["transactions"].map((x) => Transaction.fromJson(x))),
-    splits: List<Split>.from(json["splits"].map((x) => Split.fromJson(x))),
-    paRes: json["paRes"],
-    otherInfo: json["otherInfo"],
-    adviceTransactionType: json["adviceTransactionType"],
-    isWalletCredited: json["isWalletCredited"],
-  );
+        adviceId: json["adviceId"],
+        currency: json["currency"],
+        reference: json["reference"],
+        processorRef: json["processorRef"],
+        merchantRef: json["merchantRef"],
+        originalAmount: json["originalAmount"],
+        amountAfterCharge: json["amountAfterCharge"],
+        description: json["description"],
+        customerId: json["customerId"],
+        customerName: json["customerName"],
+        customerEmail: json["customerEmail"],
+        customerMobile: json["customerMobile"],
+        charge: json["charge"],
+        status: json["status"],
+        message: json["message"],
+        integrationKey: json["integrationKey"],
+        integrationId: json["integrationId"],
+        returnUrl: json["returnUrl"],
+        walletId: json["walletId"],
+        cyberpayReturnUrl: json["cyberpayReturnUrl"],
+        cyberpayNotificationUrl: json["cyberpayNotificationUrl"],
+        processorCode: json["processorCode"],
+        productCode: json["productCode"],
+        channelCode: json["channelCode"],
+        card: CardModel.fromJson(json["card"]),
+        integration: Integration.fromJson(json["integration"]),
+        createdOn: DateTime.parse(json["createdOn"]),
+        transactions: List<Transaction>.from(
+            json["transactions"].map((x) => Transaction.fromJson(x))),
+        splits: List<Split>.from(json["splits"].map((x) => Split.fromJson(x))),
+        paRes: json["paRes"],
+        otherInfo: json["otherInfo"],
+        adviceTransactionType: json["adviceTransactionType"],
+        isWalletCredited: json["isWalletCredited"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "adviceId": adviceId,
-    "currency": currency,
-    "reference": reference,
-    "processorRef": processorRef,
-    "merchantRef": merchantRef,
-    "originalAmount": originalAmount,
-    "amountAfterCharge": amountAfterCharge,
-    "description": description,
-    "customerId": customerId,
-    "customerName": customerName,
-    "customerEmail": customerEmail,
-    "customerMobile": customerMobile,
-    "charge": charge,
-    "status": status,
-    "message": message,
-    "integrationKey": integrationKey,
-    "integrationId": integrationId,
-    "returnUrl": returnUrl,
-    "walletId": walletId,
-    "cyberpayReturnUrl": cyberpayReturnUrl,
-    "cyberpayNotificationUrl": cyberpayNotificationUrl,
-    "processorCode": processorCode,
-    "productCode": productCode,
-    "channelCode": channelCode,
-    "card": card.toJson(),
-    "integration": integration.toJson(),
-    "createdOn": createdOn.toIso8601String(),
-    "transactions": List<dynamic>.from(transactions.map((x) => x.toJson())),
-    "splits": List<dynamic>.from(splits.map((x) => x.toJson())),
-    "paRes": paRes,
-    "otherInfo": otherInfo,
-    "adviceTransactionType": adviceTransactionType,
-    "isWalletCredited": isWalletCredited,
-  };
+        "adviceId": adviceId,
+        "currency": currency,
+        "reference": reference,
+        "processorRef": processorRef,
+        "merchantRef": merchantRef,
+        "originalAmount": originalAmount,
+        "amountAfterCharge": amountAfterCharge,
+        "description": description,
+        "customerId": customerId,
+        "customerName": customerName,
+        "customerEmail": customerEmail,
+        "customerMobile": customerMobile,
+        "charge": charge,
+        "status": status,
+        "message": message,
+        "integrationKey": integrationKey,
+        "integrationId": integrationId,
+        "returnUrl": returnUrl,
+        "walletId": walletId,
+        "cyberpayReturnUrl": cyberpayReturnUrl,
+        "cyberpayNotificationUrl": cyberpayNotificationUrl,
+        "processorCode": processorCode,
+        "productCode": productCode,
+        "channelCode": channelCode,
+        "card": card.toJson(),
+        "integration": integration.toJson(),
+        "createdOn": createdOn.toIso8601String(),
+        "transactions": List<dynamic>.from(transactions.map((x) => x.toJson())),
+        "splits": List<dynamic>.from(splits.map((x) => x.toJson())),
+        "paRes": paRes,
+        "otherInfo": otherInfo,
+        "adviceTransactionType": adviceTransactionType,
+        "isWalletCredited": isWalletCredited,
+      };
 }
 
-class Card {
+CardModel cardModelFromJson(String str) => CardModel.fromJson(json.decode(str));
+
+String cardModelToJson(CardModel data) => json.encode(data.toJson());
+
+class CardModel extends Model{
   String name;
   int expiryMonth;
   int expiryYear;
@@ -212,8 +226,9 @@ class Card {
   String channel;
   String processCode;
   int providerId;
+  String otp; //only if otp is required
 
-  Card({
+  CardModel({
     this.name,
     this.expiryMonth,
     this.expiryYear,
@@ -225,35 +240,38 @@ class Card {
     this.channel,
     this.processCode,
     this.providerId,
+    this.otp,
   });
 
-  factory Card.fromJson(Map<String, dynamic> json) => Card(
-    name: json["name"],
-    expiryMonth: json["expiryMonth"],
-    expiryYear: json["expiryYear"],
-    cardNumber: json["cardNumber"],
-    cvv: json["cvv"],
-    otherInfo: json["otherInfo"],
-    reference: json["reference"],
-    cardPin: json["cardPin"],
-    channel: json["channel"],
-    processCode: json["processCode"],
-    providerId: json["providerId"],
+  factory CardModel.fromJson(Map<String, dynamic> json) => CardModel(
+        name: json["name"],
+        expiryMonth: json["expiryMonth"],
+        expiryYear: json["expiryYear"],
+        cardNumber: json["cardNumber"],
+        cvv: json["cvv"],
+        otherInfo: json["otherInfo"],
+        reference: json["reference"],
+        cardPin: json["cardPin"],
+        channel: json["channel"],
+        processCode: json["processCode"],
+        providerId: json["providerId"],
+        otp: json["otp"],
   );
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "expiryMonth": expiryMonth,
-    "expiryYear": expiryYear,
-    "cardNumber": cardNumber,
-    "cvv": cvv,
-    "otherInfo": otherInfo,
-    "reference": reference,
-    "cardPin": cardPin,
-    "channel": channel,
-    "processCode": processCode,
-    "providerId": providerId,
-  };
+        "name": name,
+        "expiryMonth": expiryMonth,
+        "expiryYear": expiryYear,
+        "cardNumber": cardNumber,
+        "cvv": cvv,
+        "otherInfo": otherInfo,
+        "reference": reference,
+        "cardPin": cardPin,
+        "channel": channel,
+        "processCode": processCode,
+        "providerId": providerId,
+        "otp": otp,
+      };
 }
 
 class Integration {
@@ -284,32 +302,36 @@ class Integration {
   });
 
   factory Integration.fromJson(Map<String, dynamic> json) => Integration(
-    integrationId: json["integrationId"],
-    name: json["name"],
-    businessCode: json["businessCode"],
-    businessName: json["businessName"],
-    integrationKey: json["integrationKey"],
-    status: json["status"],
-    businessStatus: json["businessStatus"],
-    isDynamicSpliting: json["isDynamicSpliting"],
-    channels: List<String>.from(json["channels"].map((x) => x)),
-    integrationChannels: List<IntegrationChannel>.from(json["integrationChannels"].map((x) => IntegrationChannel.fromJson(x))),
-    transactions: List<Transaction>.from(json["transactions"].map((x) => Transaction.fromJson(x))),
-  );
+        integrationId: json["integrationId"],
+        name: json["name"],
+        businessCode: json["businessCode"],
+        businessName: json["businessName"],
+        integrationKey: json["integrationKey"],
+        status: json["status"],
+        businessStatus: json["businessStatus"],
+        isDynamicSpliting: json["isDynamicSpliting"],
+        channels: List<String>.from(json["channels"].map((x) => x)),
+        integrationChannels: List<IntegrationChannel>.from(
+            json["integrationChannels"]
+                .map((x) => IntegrationChannel.fromJson(x))),
+        transactions: List<Transaction>.from(
+            json["transactions"].map((x) => Transaction.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "integrationId": integrationId,
-    "name": name,
-    "businessCode": businessCode,
-    "businessName": businessName,
-    "integrationKey": integrationKey,
-    "status": status,
-    "businessStatus": businessStatus,
-    "isDynamicSpliting": isDynamicSpliting,
-    "channels": List<dynamic>.from(channels.map((x) => x)),
-    "integrationChannels": List<dynamic>.from(integrationChannels.map((x) => x.toJson())),
-    "transactions": List<dynamic>.from(transactions.map((x) => x.toJson())),
-  };
+        "integrationId": integrationId,
+        "name": name,
+        "businessCode": businessCode,
+        "businessName": businessName,
+        "integrationKey": integrationKey,
+        "status": status,
+        "businessStatus": businessStatus,
+        "isDynamicSpliting": isDynamicSpliting,
+        "channels": List<dynamic>.from(channels.map((x) => x)),
+        "integrationChannels":
+            List<dynamic>.from(integrationChannels.map((x) => x.toJson())),
+        "transactions": List<dynamic>.from(transactions.map((x) => x.toJson())),
+      };
 }
 
 class IntegrationChannel {
@@ -329,23 +351,24 @@ class IntegrationChannel {
     this.secretKey,
   });
 
-  factory IntegrationChannel.fromJson(Map<String, dynamic> json) => IntegrationChannel(
-    integrationChannelId: json["integrationChannelId"],
-    integrationId: json["integrationId"],
-    channelId: json["channelId"],
-    channel: Channel.fromJson(json["channel"]),
-    status: json["status"],
-    secretKey: json["secretKey"],
-  );
+  factory IntegrationChannel.fromJson(Map<String, dynamic> json) =>
+      IntegrationChannel(
+        integrationChannelId: json["integrationChannelId"],
+        integrationId: json["integrationId"],
+        channelId: json["channelId"],
+        channel: Channel.fromJson(json["channel"]),
+        status: json["status"],
+        secretKey: json["secretKey"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "integrationChannelId": integrationChannelId,
-    "integrationId": integrationId,
-    "channelId": channelId,
-    "channel": channel.toJson(),
-    "status": status,
-    "secretKey": secretKey,
-  };
+        "integrationChannelId": integrationChannelId,
+        "integrationId": integrationId,
+        "channelId": channelId,
+        "channel": channel.toJson(),
+        "status": status,
+        "secretKey": secretKey,
+      };
 }
 
 class Channel {
@@ -368,24 +391,24 @@ class Channel {
   });
 
   factory Channel.fromJson(Map<String, dynamic> json) => Channel(
-    channelId: json["channelId"],
-    name: json["name"],
-    code: json["code"],
-    isDefault: json["isDefault"],
-    isKeyRequired: json["isKeyRequired"],
-    isActive: json["isActive"],
-    providers: List<dynamic>.from(json["providers"].map((x) => x)),
-  );
+        channelId: json["channelId"],
+        name: json["name"],
+        code: json["code"],
+        isDefault: json["isDefault"],
+        isKeyRequired: json["isKeyRequired"],
+        isActive: json["isActive"],
+        providers: List<dynamic>.from(json["providers"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "channelId": channelId,
-    "name": name,
-    "code": code,
-    "isDefault": isDefault,
-    "isKeyRequired": isKeyRequired,
-    "isActive": isActive,
-    "providers": List<dynamic>.from(providers.map((x) => x)),
-  };
+        "channelId": channelId,
+        "name": name,
+        "code": code,
+        "isDefault": isDefault,
+        "isKeyRequired": isKeyRequired,
+        "isActive": isActive,
+        "providers": List<dynamic>.from(providers.map((x) => x)),
+      };
 }
 
 class Transaction {
@@ -426,42 +449,42 @@ class Transaction {
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
-    transactionId: json["transactionId"],
-    maskedCard: json["maskedCard"],
-    reference: json["reference"],
-    processorRef: json["processorRef"],
-    channelCode: json["channelCode"],
-    adviceId: json["adviceId"],
-    processorCode: json["processorCode"],
-    providerId: json["providerId"],
-    status: json["status"],
-    message: json["message"],
-    provider: Provider.fromJson(json["provider"]),
-    createdOn: DateTime.parse(json["createdOn"]),
-    otherInfo: json["otherInfo"],
-    transactionType: json["transactionType"],
-    transactionIdentifier: json["transactionIdentifier"],
-    eciFlag: json["eciFlag"],
-  );
+        transactionId: json["transactionId"],
+        maskedCard: json["maskedCard"],
+        reference: json["reference"],
+        processorRef: json["processorRef"],
+        channelCode: json["channelCode"],
+        adviceId: json["adviceId"],
+        processorCode: json["processorCode"],
+        providerId: json["providerId"],
+        status: json["status"],
+        message: json["message"],
+        provider: Provider.fromJson(json["provider"]),
+        createdOn: DateTime.parse(json["createdOn"]),
+        otherInfo: json["otherInfo"],
+        transactionType: json["transactionType"],
+        transactionIdentifier: json["transactionIdentifier"],
+        eciFlag: json["eciFlag"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "transactionId": transactionId,
-    "maskedCard": maskedCard,
-    "reference": reference,
-    "processorRef": processorRef,
-    "channelCode": channelCode,
-    "adviceId": adviceId,
-    "processorCode": processorCode,
-    "providerId": providerId,
-    "status": status,
-    "message": message,
-    "provider": provider.toJson(),
-    "createdOn": createdOn.toIso8601String(),
-    "otherInfo": otherInfo,
-    "transactionType": transactionType,
-    "transactionIdentifier": transactionIdentifier,
-    "eciFlag": eciFlag,
-  };
+        "transactionId": transactionId,
+        "maskedCard": maskedCard,
+        "reference": reference,
+        "processorRef": processorRef,
+        "channelCode": channelCode,
+        "adviceId": adviceId,
+        "processorCode": processorCode,
+        "providerId": providerId,
+        "status": status,
+        "message": message,
+        "provider": provider.toJson(),
+        "createdOn": createdOn.toIso8601String(),
+        "otherInfo": otherInfo,
+        "transactionType": transactionType,
+        "transactionIdentifier": transactionIdentifier,
+        "eciFlag": eciFlag,
+      };
 }
 
 class Provider {
@@ -494,34 +517,35 @@ class Provider {
   });
 
   factory Provider.fromJson(Map<String, dynamic> json) => Provider(
-    providerId: json["providerId"],
-    code: json["code"],
-    name: json["name"],
-    channelId: json["channelId"],
-    channelCode: json["channelCode"],
-    channel: Channel.fromJson(json["channel"]),
-    status: json["status"],
-    transactions: List<dynamic>.from(json["transactions"].map((x) => x)),
-    parameters: List<Parameter>.from(json["parameters"].map((x) => Parameter.fromJson(x))),
-    bins: List<Bin>.from(json["bins"].map((x) => Bin.fromJson(x))),
-    processorRef: json["processorRef"],
-    walletCode: json["walletCode"],
-  );
+        providerId: json["providerId"],
+        code: json["code"],
+        name: json["name"],
+        channelId: json["channelId"],
+        channelCode: json["channelCode"],
+        channel: Channel.fromJson(json["channel"]),
+        status: json["status"],
+        transactions: List<dynamic>.from(json["transactions"].map((x) => x)),
+        parameters: List<Parameter>.from(
+            json["parameters"].map((x) => Parameter.fromJson(x))),
+        bins: List<Bin>.from(json["bins"].map((x) => Bin.fromJson(x))),
+        processorRef: json["processorRef"],
+        walletCode: json["walletCode"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "providerId": providerId,
-    "code": code,
-    "name": name,
-    "channelId": channelId,
-    "channelCode": channelCode,
-    "channel": channel.toJson(),
-    "status": status,
-    "transactions": List<dynamic>.from(transactions.map((x) => x)),
-    "parameters": List<dynamic>.from(parameters.map((x) => x.toJson())),
-    "bins": List<dynamic>.from(bins.map((x) => x.toJson())),
-    "processorRef": processorRef,
-    "walletCode": walletCode,
-  };
+        "providerId": providerId,
+        "code": code,
+        "name": name,
+        "channelId": channelId,
+        "channelCode": channelCode,
+        "channel": channel.toJson(),
+        "status": status,
+        "transactions": List<dynamic>.from(transactions.map((x) => x)),
+        "parameters": List<dynamic>.from(parameters.map((x) => x.toJson())),
+        "bins": List<dynamic>.from(bins.map((x) => x.toJson())),
+        "processorRef": processorRef,
+        "walletCode": walletCode,
+      };
 }
 
 class Bin {
@@ -540,20 +564,20 @@ class Bin {
   });
 
   factory Bin.fromJson(Map<String, dynamic> json) => Bin(
-    binId: json["binId"],
-    providerId: json["providerId"],
-    binValue: json["binValue"],
-    status: json["status"],
-    cardScheme: json["cardScheme"],
-  );
+        binId: json["binId"],
+        providerId: json["providerId"],
+        binValue: json["binValue"],
+        status: json["status"],
+        cardScheme: json["cardScheme"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "binId": binId,
-    "providerId": providerId,
-    "binValue": binValue,
-    "status": status,
-    "cardScheme": cardScheme,
-  };
+        "binId": binId,
+        "providerId": providerId,
+        "binValue": binValue,
+        "status": status,
+        "cardScheme": cardScheme,
+      };
 }
 
 class Parameter {
@@ -574,22 +598,22 @@ class Parameter {
   });
 
   factory Parameter.fromJson(Map<String, dynamic> json) => Parameter(
-    parameterId: json["parameterId"],
-    key: json["key"],
-    value: json["value"],
-    description: json["description"],
-    providerId: json["providerId"],
-    env: json["env"],
-  );
+        parameterId: json["parameterId"],
+        key: json["key"],
+        value: json["value"],
+        description: json["description"],
+        providerId: json["providerId"],
+        env: json["env"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "parameterId": parameterId,
-    "key": key,
-    "value": value,
-    "description": description,
-    "providerId": providerId,
-    "env": env,
-  };
+        "parameterId": parameterId,
+        "key": key,
+        "value": value,
+        "description": description,
+        "providerId": providerId,
+        "env": env,
+      };
 }
 
 class Split {
@@ -606,16 +630,16 @@ class Split {
   });
 
   factory Split.fromJson(Map<String, dynamic> json) => Split(
-    sharedSplitId: json["sharedSplitId"],
-    itemCode: json["itemCode"],
-    amount: json["amount"],
-    shouldDeductFrom: json["shouldDeductFrom"],
-  );
+        sharedSplitId: json["sharedSplitId"],
+        itemCode: json["itemCode"],
+        amount: json["amount"],
+        shouldDeductFrom: json["shouldDeductFrom"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "sharedSplitId": sharedSplitId,
-    "itemCode": itemCode,
-    "amount": amount,
-    "shouldDeductFrom": shouldDeductFrom,
-  };
+        "sharedSplitId": sharedSplitId,
+        "itemCode": itemCode,
+        "amount": amount,
+        "shouldDeductFrom": shouldDeductFrom,
+      };
 }

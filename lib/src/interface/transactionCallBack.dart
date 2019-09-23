@@ -1,13 +1,16 @@
 import 'package:cyberpaysdkflutter/src/models/TransactionModel.dart';
 
-class TransactionCallBack{
-  void onSuccess(String transactionReference){}
+class TransactionCallBack {
+  void onSuccess(String transactionReference) {}
 
-  void onOtpRequired(TransactionModel transaction){}
+  void onOtpRequired(TransactionModel transaction) {}
 
-  void onSecure3dRequired(TransactionModel transaction){}
+  void onSecure3dRequired(TransactionModel transaction) {}
 
-  void onSecure3DMpgsRequired(TransactionModel transaction){}
+  void onSecure3DMpgsRequired(TransactionModel transaction) {}
+
+  void onEnrolOtp(TransactionModel transaction){}
+
 
 //  void onError(Throwable error, Transaction transaction){}
 

@@ -22,16 +22,16 @@ class BankModel {
   });
 
   factory BankModel.fromJson(Map<String, dynamic> json) => BankModel(
-    bankCode: json["bankCode"],
-    accountNumber: json["accountNumber"],
-    reference: json["reference"],
-    accountName: json["accountName"],
-  );
+        bankCode: json["bankCode"],
+        accountNumber: json["accountNumber"],
+        reference: json["reference"],
+        accountName: json["accountName"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "bankCode": bankCode,
-    "accountNumber": accountNumber,
-    "reference": reference,
-    "accountName": accountName,
-  };
+        "bankCode": bankCode,
+        "accountNumber": accountNumber,
+        "reference": reference,
+        "accountName": accountName,
+      };
 }
