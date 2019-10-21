@@ -269,23 +269,27 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-              child: getCardTypeIcon(widget.cardNumber),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: Text(
-                widget.cardNumber.isEmpty || widget.cardNumber == null
-                    ? 'XXXX XXXX XXXX XXXX XXX'
-                    : widget.cardNumber,
-                style: widget.textStyle ?? defaultTextStyle,
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(
+                    widget.cardNumber.isEmpty || widget.cardNumber == null
+                        ? 'XXXX XXXX XXXX XXXX XXX'
+                        : widget.cardNumber,
+                    style: widget.textStyle ?? defaultTextStyle,
+                  ),
+                ),
               ),
-            ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+                  child: getCardTypeIcon(widget.cardNumber),
+                ),
+              ),
+            ],
           ),
           Expanded(
             child: Padding(

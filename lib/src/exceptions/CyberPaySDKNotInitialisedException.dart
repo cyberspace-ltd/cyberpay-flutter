@@ -1,2 +1,1 @@
-class CyberPaySDKNotInitializedException {
-}
+class CyberPaySDKNotInitializedException {}

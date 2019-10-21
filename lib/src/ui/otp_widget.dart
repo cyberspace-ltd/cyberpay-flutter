@@ -27,9 +27,8 @@ class OtpWidget extends StatefulWidget {
 
 class _OtpWidgetState extends State<OtpWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
+  AnimationController _controller;
   Animation<double> _frontRotation;
-  Animation<double> _backRotation;
   Gradient backgroundGradientColor;
 
   @override
@@ -37,7 +36,7 @@ class _OtpWidgetState extends State<OtpWidget>
     super.initState();
 
     ///initialize the animation controller
-    controller = AnimationController(
+    _controller = AnimationController(
       duration: widget.animationDuration,
       vsync: this,
     );
@@ -69,12 +68,12 @@ class _OtpWidgetState extends State<OtpWidget>
           weight: 50.0,
         ),
       ],
-    ).animate(controller);
+    ).animate(_controller);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -89,7 +88,7 @@ class _OtpWidgetState extends State<OtpWidget>
     /// controller forward starts animation and shows back layout.
     /// controller reverse starts animation and shows front layout.
     ///
-    controller.forward();
+    _controller.forward();
 
     return Stack(
       children: <Widget>[

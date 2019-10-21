@@ -54,8 +54,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
   final TextEditingController _cvvCodeController =
       MaskedTextController(mask: '000');
   final TextEditingController _cardPinController =
-  MaskedTextController(mask: '0000');
-
+      MaskedTextController(mask: '0000');
 
   FocusNode cvvFocusNode = FocusNode();
 
@@ -64,7 +63,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
     onCreditCardModelChange(creditCardModel);
   }
 
-
   void createCreditCardModel() {
     cardNumber = widget.cardNumber ?? '';
     expiryDate = widget.expiryDate ?? '';
@@ -72,8 +70,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
     cvvCode = widget.cvvCode ?? '';
     cardPin = widget.cardPin ?? '';
 
-    creditCardModel = CreditCardModel(
-        cardNumber, expiryDate, cardHolderName, cvvCode, isCvvFocused, cardPin, visibility);
+    creditCardModel = CreditCardModel(cardNumber, expiryDate, cardHolderName,
+        cvvCode, isCvvFocused, cardPin, visibility);
   }
 
   @override
@@ -92,12 +90,12 @@ class _CreditCardFormState extends State<CreditCardForm> {
         creditCardModel.cardNumber = cardNumber;
         onCreditCardModelChange(creditCardModel);
 
-        if(_cardNumberController.text.startsWith("4")){
+        if (_cardNumberController.text.startsWith("4")) {
           visibility = true;
-        } else if(_cardNumberController.text.trim().length == 23) {
+        } else if (_cardNumberController.text.trim().length == 23) {
           print(_cardNumberController.text.trim().length);
           visibility = true;
-        }else
+        } else
           visibility = false;
       });
     });
@@ -110,13 +108,13 @@ class _CreditCardFormState extends State<CreditCardForm> {
       });
     });
 
-    _cardHolderNameController.addListener(() {
-      setState(() {
-        cardHolderName = _cardHolderNameController.text;
-        creditCardModel.cardHolderName = cardHolderName;
-        onCreditCardModelChange(creditCardModel);
-      });
-    });
+//    _cardHolderNameController.addListener(() {
+//      setState(() {
+//        cardHolderName = _cardHolderNameController.text;
+//        creditCardModel.cardHolderName = cardHolderName;
+//        onCreditCardModelChange(creditCardModel);
+//      });
+//    });
 
     _cvvCodeController.addListener(() {
       setState(() {
@@ -126,7 +124,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       });
     });
 
-    _cardPinController.addListener((){
+    _cardPinController.addListener(() {
       setState(() {
         cardPin = _cardPinController.text;
         creditCardModel.cardPin = cardPin;
@@ -240,6 +238,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               margin: const EdgeInsets.only(left: 16, top: 8, right: 16),
               child: TextFormField(
+                enabled: false,
                 controller: _cardHolderNameController,
                 cursorColor: widget.cursorColor ?? themeColor,
                 style: TextStyle(

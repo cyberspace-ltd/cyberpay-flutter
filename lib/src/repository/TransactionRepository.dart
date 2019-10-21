@@ -1,5 +1,6 @@
 import 'package:cyberpaysdkflutter/src/apis/CyberPayApi.dart';
-import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart';
+import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart'
+    as callback;
 import 'package:cyberpaysdkflutter/src/network/ApiResponse.dart';
 import 'package:cyberpaysdkflutter/src/network/ChargeResponse.dart';
 
@@ -15,17 +16,29 @@ class TransactionRepository {
     return _instance;
   }
 
-  Future<ApiResponse> beginTransactionApi(String encodedBody) async {
+  Future<ApiResponse> beginTransactionApi(
+      {String encodedBody,
+      callback.onSuccess success,
+      callback.onError error}) async {
     try {
-      return _api.beginTransaction(encodedBody, new TransactionCallBack());
+      return _api.beginTransaction(encodedBody, success, error);
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<CardPaymentResponse> chargeCardApi(String encodedBody) async {
+  Future<CardPaymentResponse> chargeCardApi(
+      {String encodedBody,
+      callback.onSuccess success,
+      callback.onOtpRequired otpRequired,
+      callback.onProvidePin providePin,
+      callback.onEnrolOtp enrolOtp,
+      callback.onSecure3dRequired secure3dRequired,
+      callback.onSecure3DMpgsRequired secure3dMpgsRequired,
+      callback.onError error}) async {
     try {
-      return _api.chargeCard(encodedBody, new TransactionCallBack());
+      return _api.chargeCard(encodedBody, success, otpRequired, providePin,
+          enrolOtp, secure3dRequired, secure3dMpgsRequired, error);
     } catch (error) {
       rethrow;
     }
@@ -39,25 +52,34 @@ class TransactionRepository {
     }
   }
 
-  Future<ApiResponse> VerifyTransactionApi(String transactionRef) async {
+  Future<ApiResponse> verifyTransactionApi(
+      {String encodedBody,
+      callback.onSuccess success,
+      callback.onError error}) async {
     try {
-      return _api.VerifyTransaction(transactionRef);
+      return _api.verifyTransaction(encodedBody, success, error);
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<CardPaymentResponse> VerifyOtpApi(String value) async {
+  Future<CardPaymentResponse> verifyOtpApi(
+      {String encodedBody,
+      callback.onSuccess success,
+      callback.onError error}) async {
     try {
-      return _api.VerifyOtp(value);
+      return _api.verifyOtp(encodedBody, success, error);
     } catch (error) {
       rethrow;
     }
   }
 
-  Future<CardPaymentResponse> VerifyBankOtpApi(String encodedBody) async {
+  Future<CardPaymentResponse> verifyBankOtpApi(
+      {String encodedBody,
+      callback.onSuccess success,
+      callback.onError error}) async {
     try {
-      return _api.VerifyBankOtp(encodedBody);
+      return _api.verifyBankOtp(encodedBody, success, error);
     } catch (error) {
       rethrow;
     }
@@ -71,9 +93,9 @@ class TransactionRepository {
     }
   }
 
-  Future<ApiResponse> enrolOtpApi(String encodedBody) async {
+  Future<CardPaymentResponse> enrolOtpApi(String encodedBody) async {
     try {
-      return _api.enrolOtp(encodedBody);
+      return _api.enrolOtpAPI(encodedBody);
     } catch (error) {
       rethrow;
     }

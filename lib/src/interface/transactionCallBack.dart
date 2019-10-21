@@ -1,18 +1,21 @@
-import 'package:cyberpaysdkflutter/src/models/TransactionModel.dart';
+import 'package:cyberpaysdkflutter/src/models/cardModel.dart';
+import 'package:cyberpaysdkflutter/src/models/charge_bank_model.dart';
+import 'package:cyberpaysdkflutter/src/models/charge_model.dart';
 
-class TransactionCallBack {
-  void onSuccess(String transactionReference) {}
+typedef onSuccess = void Function(String ref, String message);
 
-  void onOtpRequired(TransactionModel transaction) {}
+typedef onProvidePin = void Function(Charge charge);
 
-  void onSecure3dRequired(TransactionModel transaction) {}
+typedef onOtpRequired = void Function(Charge charge, Card card);
 
-  void onSecure3DMpgsRequired(TransactionModel transaction) {}
+typedef onBankOtpRequired = void Function(ChargeBank transaction);
 
-  void onEnrolOtp(TransactionModel transaction){}
+typedef onSecure3dRequired = void Function(Charge transaction);
 
+typedef onSecure3DMpgsRequired = void Function(Charge transaction);
 
-//  void onError(Throwable error, Transaction transaction){}
+typedef onEnrolOtp = void Function(Charge transaction);
 
-//  void onBank(List<BankResponse> bankResponses){}
-}
+typedef onError = void Function(String error);
+
+//typedef onBank = void Function(List<BankResponse> bankResponses);

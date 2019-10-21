@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cyberpaysdkflutter/src/apis/CyberPayApi.dart';
-import 'package:cyberpaysdkflutter/src/interface/transactionCallBack.dart';
 import 'package:cyberpaysdkflutter/src/models/OtpRequestModel.dart';
 import 'package:cyberpaysdkflutter/src/models/TransactionModel.dart';
 import 'package:cyberpaysdkflutter/src/repository/TransactionRepository.dart';
@@ -45,9 +44,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TransactionCallBack {
+class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _amountController;
 
+  String API_KEY = 'd5355204f9cf495f853c8f8d26ada19b';
   String cardNumber = '';
   String expiryDate = '';
   String cardHolderName = '';
@@ -102,24 +102,23 @@ class _MyHomePageState extends State<MyHomePage> with TransactionCallBack {
                     "PAY",
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () async {
+                  onPressed: () {
                     var loadingBar = FlushbarHelper.createLoading(
                         message: "Please wait...Transaction processing.",
                         linearProgressIndicator: LinearProgressIndicator())
                       ..show(context);
                     var splitDate = expiryDate.split("/");
 
-                    var randomizer =
-                        new Random(); // can get a seed as a parameter
+                    var random = new Random(); // can get a seed as a parameter
 
                     // Integer between 0 and 100 (0 can be 100 not)
-                    var num = randomizer.nextInt(1097640);
-                    var numb = randomizer.nextInt(1096640);
-                    String merch_reference =
+                    var num = random.nextInt(1097640);
+                    var numb = random.nextInt(1096640);
+                    String meReference =
                         'CYBEPAY' + num.toString() + numb.toString();
 
                     TransactionModel _transModel = TransactionModel(
-                      merchantRef: merch_reference,
+                      merchantRef: meReference,
                       amount: int.parse(_amountController.text) * 100,
                       customerEmail: "ihowaonaro@gmail.com",
                       integrationKey: "d5355204f9cf495f853c8f8d26ada19b",
@@ -131,89 +130,169 @@ class _MyHomePageState extends State<MyHomePage> with TransactionCallBack {
 
                     TransactionRepository.getInstance(CyberPayApi())
                         .beginTransactionApi(
-                            transactionModelToJson(_transModel))
-                        .then((result) {
-                      loadingBar.dismiss(context);
+                            encodedBody: transactionModelToJson(_transModel),
+                            success: (reference, message) {
+                              loadingBar.dismiss(context);
 
-                      var reference = result.data.transactionReference;
-                      if (reference != null) {
-                        CardModel _charge = CardModel(
-                            name: cardHolderName,
-                            cardNumber: cardNumber.replaceAll(
-                                new RegExp(r"\s+\b|\b\s"), ""),
-                            expiryMonth: int.parse(splitDate[0]),
-                            expiryYear: int.parse(splitDate[1]),
-                            cvv: cvvCode,
-                            cardPin: cardPin,
-                            reference: reference);
-                        TransactionRepository.getInstance(CyberPayApi())
-                            .chargeCardApi(cardModelToJson(_charge))
-                            .then((cardResult) async {
-                          var loadingBar = FlushbarHelper.createLoading(
-                              message: cardResult.data.message,
-                              linearProgressIndicator: null);
-                          loadingBar..show(context);
+                              if (reference != null) {
+                                CardModel _charge = CardModel(
+                                    name: cardHolderName,
+                                    cardNumber: cardNumber.replaceAll(
+                                        new RegExp(r"\s+\b|\b\s"), ""),
+                                    expiryMonth: int.parse(splitDate[0]),
+                                    expiryYear: int.parse(splitDate[1]),
+                                    cvv: cvvCode,
+                                    cardPin: cardPin,
+                                    reference: reference);
 
-                          if (cardResult.data.status == "Failed") {
-                            var loadingBar = FlushbarHelper.createLoading(
-                                message: cardResult.data.message,
-                                linearProgressIndicator: null);
-                            loadingBar..show(context);
-                          }
-                          if (cardResult.data.status == "Otp") {
+                                TransactionRepository.getInstance(CyberPayApi())
+                                    .chargeCardApi(
+                                        encodedBody: cardModelToJson(_charge),
+                                        success: (success, message) {
+                                          var loadingBar =
+                                              FlushbarHelper.createLoading(
+                                                  message:
+                                                      "Transaction successful: Transaction Ref: {$success}, {$message}",
+                                                  linearProgressIndicator:
+                                                      null);
+                                          loadingBar..show(context);
+                                        },
+                                        otpRequired: (charge, card) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    new HomeScreen(
+                                                        transactionModel:
+                                                            _charge)),
+                                          );
+                                        },
+                                        providePin: (providePin) {
+                                          var loadingBar =
+                                              FlushbarHelper.createLoading(
+                                                  message:
+                                                      "Transaction successful: Transaction Ref: {$providePin}",
+                                                  linearProgressIndicator:
+                                                      null);
+                                          loadingBar..show(context);
+                                        },
+                                        enrolOtp: (enrolOtp) {},
+                                        secure3dMpgsRequired:
+                                            (secure3dRequired) async {
+                                          var url = secure3dRequired.returnUrl;
+                                          if (await canLaunch(url)) {
+                                            await launch(url);
+                                          }
+                                        },
+                                        secure3dRequired:
+                                            (secure3dRequired) async {
+                                          var url = secure3dRequired.returnUrl;
+                                          if (await canLaunch(url)) {
+                                            await launch(url);
+                                          }
+                                        },
+                                        error: (error) {
+                                          FlushbarHelper.createError(
+                                              message: "$error")
+                                            ..show(context);
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => new HomeScreen(
-                                      transactionModel: _charge)),
-                            );
-                          } else if (cardResult.data.status == "Success") {
-                            var loadingBar = FlushbarHelper.createLoading(
-                                message:
-                                    "Transaction successful: Transaction Ref: {$reference}",
-                                linearProgressIndicator: null);
-                            loadingBar..show(context);
-                          } else if (cardResult.data.status == "ProvidePin") {
-                            var loadingBar = FlushbarHelper.createLoading(
-                                message:
-                                    "Transaction successful: Transaction Ref: {$reference}",
-                                linearProgressIndicator: null);
-                            loadingBar..show(context);
-                          } else if (cardResult.data.status == "Successful") {
-                            var loadingBar = FlushbarHelper.createLoading(
-                                message:
-                                    "Transaction successful: with Transaction Ref: {$reference}",
-                                linearProgressIndicator: null);
-                            loadingBar..show(context);
-                          } else if (cardResult.data.status == "EnrollOtp") {
+                                          throw Exception(error);
+                                        });
+                              } else {
+                                loadingBar = FlushbarHelper.createError(
+                                    message: "An Error Occured")
+                                  ..show(context);
+                              }
+                            },
+                            error: (error) {
+                              FlushbarHelper.createError(message: "$error")
+                                ..show(context);
+                              throw Exception(error);
+                            });
 
-                          } else if (cardResult.data.status == "Secure3D") {
-                            var url = cardResult.data.redirectUrl;
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            }
-                          } else if (cardResult.data.status == "Secure3DMpgs") {
-                            var url = cardResult.data.redirectUrl;
-                            if (await canLaunch(url)) {
-                              await launch(url);
-                            }
-                          } else if (cardResult.data.status == "Successful") {
-                            var loadingBar = FlushbarHelper.createLoading(
-                                message:
-                                "Transaction successful: Transaction Ref: {$reference}",
-                                linearProgressIndicator: null);
-                            loadingBar..show(context);
-                          }
-
-                          loadingBar.dismiss(context);
-                        });
-                      } else {
-                        loadingBar = FlushbarHelper.createError(
-                            message: "An Error Occured")
-                          ..show(context);
-                      }
-                    });
+//                    TransactionRepository.getInstance(CyberPayApi())
+//                        .beginTransactionApi(
+//                            transactionModelToJson(_transModel))
+//                        .then((result) {
+//                      loadingBar.dismiss(context);
+//
+//                      var reference = result.data.transactionReference;
+//                      if (reference != null) {
+//                        CardModel _charge = CardModel(
+//                            name: cardHolderName,
+//                            cardNumber: cardNumber.replaceAll(
+//                                new RegExp(r"\s+\b|\b\s"), ""),
+//                            expiryMonth: int.parse(splitDate[0]),
+//                            expiryYear: int.parse(splitDate[1]),
+//                            cvv: cvvCode,
+//                            cardPin: cardPin,
+//                            reference: reference);
+//                        TransactionRepository.getInstance(CyberPayApi())
+//                            .chargeCardApi(cardModelToJson(_charge))
+//                            .then((cardResult) async {
+//                          var loadingBar = FlushbarHelper.createLoading(
+//                              message: cardResult.data.message,
+//                              linearProgressIndicator: null);
+//                          loadingBar..show(context);
+//
+//                          if (cardResult.data.status == "Failed") {
+//                            var loadingBar = FlushbarHelper.createLoading(
+//                                message: cardResult.data.message,
+//                                linearProgressIndicator: null);
+//                            loadingBar..show(context);
+//                          }
+//                          if (cardResult.data.status == "Otp") {
+//                            Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                  builder: (context) => new HomeScreen(
+//                                      transactionModel: _charge)),
+//                            );
+//                          } else if (cardResult.data.status == "Success") {
+//                            var loadingBar = FlushbarHelper.createLoading(
+//                                message:
+//                                    "Transaction successful: Transaction Ref: {$reference}",
+//                                linearProgressIndicator: null);
+//                            loadingBar..show(context);
+//                          } else if (cardResult.data.status == "ProvidePin") {
+//                            var loadingBar = FlushbarHelper.createLoading(
+//                                message:
+//                                    "Transaction successful: Transaction Ref: {$reference}",
+//                                linearProgressIndicator: null);
+//                            loadingBar..show(context);
+//                          } else if (cardResult.data.status == "Successful") {
+//                            var loadingBar = FlushbarHelper.createLoading(
+//                                message:
+//                                    "Transaction successful: with Transaction Ref: {$reference}",
+//                                linearProgressIndicator: null);
+//                            loadingBar..show(context);
+//                          } else if (cardResult.data.status == "EnrollOtp") {
+//                          } else if (cardResult.data.status == "Secure3D") {
+//                            var url = cardResult.data.redirectUrl;
+//                            if (await canLaunch(url)) {
+//                              await launch(url);
+//                            }
+//                          } else if (cardResult.data.status == "Secure3DMpgs") {
+//                            var url = cardResult.data.redirectUrl;
+//                            if (await canLaunch(url)) {
+//                              await launch(url);
+//                            }
+//                          } else if (cardResult.data.status == "Successful") {
+//                            var loadingBar = FlushbarHelper.createLoading(
+//                                message:
+//                                    "Transaction successful: Transaction Ref: {$reference}",
+//                                linearProgressIndicator: null);
+//                            loadingBar..show(context);
+//                          }
+//
+//                          loadingBar.dismiss(context);
+//                        });
+//                      } else {
+//                        loadingBar = FlushbarHelper.createError(
+//                            message: "An Error Occured")
+//                          ..show(context);
+//                      }
+//                    });
                   },
                 ),
               ],

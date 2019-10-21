@@ -214,7 +214,7 @@ CardModel cardModelFromJson(String str) => CardModel.fromJson(json.decode(str));
 
 String cardModelToJson(CardModel data) => json.encode(data.toJson());
 
-class CardModel extends Model{
+class CardModel extends Model {
   String name;
   int expiryMonth;
   int expiryYear;
@@ -256,7 +256,7 @@ class CardModel extends Model{
         processCode: json["processCode"],
         providerId: json["providerId"],
         otp: json["otp"],
-  );
+      );
 
   Map<String, dynamic> toJson() => {
         "name": name,

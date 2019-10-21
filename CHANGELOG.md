@@ -1,3 +1,22 @@
+## 1.0.0+18
+Bug Fixes, catch success message to SDK
+
+## 1.0.0+17
+Bug Fixes, catch error response on Inter Switch transaction Failure
+
+## 1.0.0+16
+Bug Fixes, catch error response on Inter Switch transaction Failure
+
+## 1.0.0+15
+Bug Fixes, Surround API with try and catch
+## 1.0.0+14
+Bug Fixes, Revert Equatable in pubspec.yaml
+
+## 1.0.0+13
+Bug Fixes, Revert Dio in pubspec.yaml
+## 1.0.0+12
+Bug Fixes, updated Read ME file 
+
 ## 1.0.0+11
 Bug Fixes
 

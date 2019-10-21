@@ -49,7 +49,6 @@ class Data {
   String responseAction;
   String redirectUrl;
 
-
   Data({
     this.transactionReference,
     this.reference,
@@ -62,7 +61,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => new Data(
-    transactionReference: json["transactionReference"],
+        transactionReference: json["transactionReference"],
         reference: json["reference"],
         status: json["status"],
         redirectUrl: json["redirectUrl"],
@@ -73,7 +72,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-    "transactionReference": transactionReference,
+        "transactionReference": transactionReference,
         "reference": reference,
         "status": status,
         "redirectUrl": redirectUrl,

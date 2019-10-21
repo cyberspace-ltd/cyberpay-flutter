@@ -15,22 +15,27 @@ class ApiResponse {
 
   bool succeeded;
 
+  String message;
+
   Data data;
 
   ApiResponse({
     this.code,
+    this.message,
     this.succeeded,
     this.data,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) => ApiResponse(
         code: json["code"],
+        message: json["message"] == null ? null : json["message"],
         succeeded: json["succeeded"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "code": code,
+        "message": message == null ? null : message,
         "succeeded": succeeded,
         "data": data == null ? null : data.toJson(),
       };
