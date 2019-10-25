@@ -23,7 +23,7 @@ class TransactionModel {
   String integrationKey;
   String productCode;
   String channel;
-  List<Split> splits;
+  List<Splits> splits;
 
   TransactionModel({
     this.merchantRef,
@@ -37,7 +37,7 @@ class TransactionModel {
     this.integrationKey,
     this.productCode,
     this.channel,
-    //this.splits,
+    this.splits,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) =>
@@ -53,7 +53,7 @@ class TransactionModel {
         integrationKey: json["integrationKey"],
         productCode: json["productCode"],
         channel: json["channel"],
-        //splits: List<Split>.from(json["splits"].map((x) => Split.fromJson(x))),
+        splits: List<Splits>.from(json["splits"].map((x) => Splits.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -69,22 +69,22 @@ class TransactionModel {
         "integrationKey": integrationKey,
         "productCode": productCode,
         "channel": channel,
-        //"splits": List<dynamic>.from(splits.map((x) => x.toJson())),
+        "splits": List<dynamic>.from(splits.map((x) => x.toJson())),
       };
 }
 
-class Split {
+class Splits {
   String walletCode;
-  int amount;
+  double amount;
   bool shouldDeductFrom;
 
-  Split({
+  Splits({
     this.walletCode,
     this.amount,
     this.shouldDeductFrom,
   });
 
-  factory Split.fromJson(Map<String, dynamic> json) => Split(
+  factory Splits.fromJson(Map<String, dynamic> json) => Splits(
         walletCode: json["walletCode"],
         amount: json["amount"],
         shouldDeductFrom: json["shouldDeductFrom"],

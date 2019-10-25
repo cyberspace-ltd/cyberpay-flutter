@@ -1,3 +1,9 @@
+## 1.0.0+20
+Change the url from staging to live
+
+## 1.0.0+19
+Bug Fixes, catch success message to SDK
+
 ## 1.0.0+18
 Bug Fixes, catch success message to SDK
 

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:cyberpaysdkflutter/src/apis/CyberPayApi.dart';
 import 'package:cyberpaysdkflutter/src/models/OtpRequestModel.dart';
-import 'package:cyberpaysdkflutter/src/models/TransactionModel.dart';
+import 'package:cyberpaysdkflutter/src/models/TransactionModel.dart' show Splits;
 import 'package:cyberpaysdkflutter/src/repository/TransactionRepository.dart';
 import 'package:cyberpaysdkflutter/src/ui/ui.dart';
 import 'package:cyberpaysdkflutter/src/utils/flushbar_helper.dart';
@@ -116,6 +116,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     var numb = random.nextInt(1096640);
                     String meReference =
                         'CYBEPAY' + num.toString() + numb.toString();
+                    Splits _split0 = Splits(amount: 122, shouldDeductFrom: true, walletCode: "");
+                    Splits _split1 = Splits(amount: 122, shouldDeductFrom: true, walletCode: "");
+
+                    List<Splits> split;
+                    split.add(_split0);
+                    split.add(_split1);
 
                     TransactionModel _transModel = TransactionModel(
                       merchantRef: meReference,
@@ -126,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       customerMobile: "080234252524",
                       customerName: cardHolderName,
                       description: "Test transaction from Flutter SDK",
+                      splits: split
                     );
 
                     TransactionRepository.getInstance(CyberPayApi())

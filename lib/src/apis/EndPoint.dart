@@ -1,6 +1,6 @@
 class EndPoints {
-  static String cyberPayBaseUrl =
-      'https://payment-api.staging.cyberpay.ng/api/v1/';
+  static String cyberPayBaseUrl = 'https://payment-api.cyberpay.ng/api/v1/';
+     // 'https://payment-api.staging.cyberpay.ng/api/v1/';
 
   static String postPaymentsUrl() {
     return cyberPayBaseUrl + "payments";
