@@ -16,39 +16,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(integrationKey: 'd5355204f9cf495f853c8f8d26ada19b', amount: 10000, customerEmail: "shabaokare@gmail.com", liveMode: false,),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, @required this.integrationKey, @required this.amount, @required this.customerEmail,@required this.liveMode}) : super(key: key);
-
-  String integrationKey;
-  String customerEmail;
-  double amount;
-  bool liveMode;
-
-  bool isTransactionObjectFilled() {
-    if(integrationKey.isNotEmpty && customerEmail.isNotEmpty ){
-      return true;
-    }
-    return false;
-  }
-
-
-  Map<String, dynamic> toJson() =>
-      {
-        "integrationKey": integrationKey,
-        "amount": amount,
-        "customerEmail": customerEmail,
-        "liveMode": liveMode
-      };
-
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
