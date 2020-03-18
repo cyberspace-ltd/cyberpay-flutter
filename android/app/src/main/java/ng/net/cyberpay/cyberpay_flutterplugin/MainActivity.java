@@ -18,7 +18,7 @@ public class MainActivity extends FlutterActivity {
 
     Booking transaction;
 
-    private String CHANNEL = "com.startActivity/testChannel";
+    private String CHANNEL = "com.startCyberPay/Channel";
     MethodChannel methodChannel;
 
     int RESULT_CODE = 1;
