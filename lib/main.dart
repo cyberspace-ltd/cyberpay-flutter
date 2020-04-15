@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cyberpay_flutterplugin/model/transaction_model.dart';
+import 'package:cyberpaysdkflutter/cyberpaysdkflutter.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
@@ -62,6 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> initCyberPayState() async {
+    try {
+      await CyberpayflutterPlugin.makePaymentWithReference(
+          integrationKey: "d5355204f9cf495f853c8f8d26ada19b",
+          reference: "JAG000001150420496377",
+          liveMode: false);
+    } on PlatformException {}
+  }
   _buildSubmitButton() {
     var ctaText = '';
 //    if (state is BookingFormUpdated) {
@@ -111,18 +120,34 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    initCyberPayState();
 
     platform.setMethodCallHandler((call) {
       final String argument = call.arguments;
       switch (call.method) {
         case "onSuccess":
-
-        print("SUCCESS $argument");
-
+          print("SUCCESS $argument");
           break;
       }
+      return;
     });
   }
+
+//  @override
+//  void initState() {
+//    super.initState();
+//
+//    platform.setMethodCallHandler((call) {
+//      final String argument = call.arguments;
+//      switch (call.method) {
+//        case "onSuccess":
+//
+//        print("SUCCESS $argument");
+//
+//          break;
+//      }
+//    });
+//  }
 //  void onTransactionModelChange(TransactionObject transactionObject){
 //    setState(() {
 //      widget.customerEmail = transactionObject.customerEmail;

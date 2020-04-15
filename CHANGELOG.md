@@ -1,3 +1,8 @@
+## 1.0.0+24
+- Upload the main Activity
+
+## 1.0.0+23
+- Removed Preview
 ## 1.0.0+22
 - Completed the version for flutter SDK with native payment
 

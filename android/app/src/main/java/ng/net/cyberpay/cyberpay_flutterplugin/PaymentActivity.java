@@ -29,21 +29,21 @@ public class PaymentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment);
 
 
-         transaction = new Transaction();
+        transaction = new Transaction();
 
 
         Intent intent = getIntent();
-        if(intent.getExtras() != null){
+        if (intent.getExtras() != null) {
 
             Bundle b = intent.getExtras();
             booking = (Booking) intent.getSerializableExtra("bookingTransaction");
             transaction.setAmount(booking.getAmount());
             transaction.setCustomerEmail(booking.getCustomerEmail());
 
-            integrationKey =  intent.getStringExtra("integrationKey");
+            integrationKey = intent.getStringExtra("integrationKey");
             LiveMode = b.getBoolean("mode");
 
-            CyberpaySdk.INSTANCE.initialiseSdk(integrationKey, LiveMode? Mode.Live : Mode.Debug);
+            CyberpaySdk.INSTANCE.initialiseSdk(integrationKey, LiveMode ? Mode.Live : Mode.Debug);
             CyberpaySdk.INSTANCE.setMerchantLogo(getResources().getDrawable(R.drawable.ic_cyberpay_logo));
 
 
@@ -64,7 +64,7 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onError(Transaction transaction, Throwable throwable) {
                 Log.e("ERROR", throwable.getMessage());
-                Toast.makeText(PaymentActivity.this, "CyberPay " +throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PaymentActivity.this, "CyberPay " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 

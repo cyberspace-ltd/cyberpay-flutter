@@ -4,10 +4,6 @@ A Flutter package allows you to easily implement the Cyber Pay Credit Card's UI 
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e546818ff64e4883a18a920f6a1c091c)](https://github.com/cyberspace-ltd/cyberpay-flutter.git)
 
-## Preview
-
-![The example app running in Android](https://github.com/simformsolutions/flutter_credit_card/blob/master/preview/preview.gif)
-
 ## Installing
 
 1.  Add dependency to `pubspec.yaml`
@@ -22,6 +18,7 @@ dependencies:
 2.  Import the package
 ```dart
 import 'package:cyberpay_flutterplugin/model/transaction_model.dart';
+import 'package:flutter/services.dart';
 
 ```
 
@@ -56,7 +53,6 @@ import 'package:cyberpay_flutterplugin/model/transaction_model.dart';
              response = "Failed to Invoke: '${e.message}'.";
            }
          },
-       ),
 
 ```
 4.  Get Response Back from InitState
